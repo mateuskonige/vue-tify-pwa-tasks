@@ -21,9 +21,9 @@ npm run lint
 ```
 
 ### Demo
-```
-https://myrmtasks.netlify.app/
-```
+
+[MyrmTasks](https://myrmtasks.netlify.app/).
+
 
 
 ### Customize configuration
