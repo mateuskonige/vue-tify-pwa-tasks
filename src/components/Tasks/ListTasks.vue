@@ -8,20 +8,25 @@
 					<v-text-field
 						label="Nova tarefa"
 						:append-icon="inputNewTask.name ? 'mdi-send' : ''"
-						@click:append="saveTask"
+						@click:append.prevent="onSubmit"
 						v-model="inputNewTask.name"
 					></v-text-field>
 				</v-col>
 			</v-row>
 		</form>
-		<v-simple-table>
+
+		<v-alert v-if="tasks == ''" dense text type="success">
+			A lista de tarefas está limpa.
+		</v-alert>
+
+		<v-simple-table v-else>
 			<thead>
 				<tr>
 					<th class="text-left">
 						#
 					</th>
 					<th class="text-left">
-						Nome
+						Tarefa
 					</th>
 					<th class="text-left">
 						Ações
@@ -29,8 +34,8 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="task in tasks" :key="task.id">
-					<td>{{ task.id }}</td>
+				<tr v-for="(task, index) in tasks" :key="index">
+					<td>{{ index }}</td>
 					<td>{{ task.name }}</td>
 					<td>
 						<v-menu transition="slide-x-transition" bottom right>
@@ -42,12 +47,16 @@
 
 							<v-list>
 								<v-list-item>
-									<v-btn text>
+									<v-btn
+										text
+										@click.prevent="editTask(index)"
+									>
 										Editar
 									</v-btn>
 								</v-list-item>
 								<v-list-item>
-									<v-btn text color="error">
+									<v-btn text color="error"
+									@click.prevent="deleteTask(index)">
 										Excluir
 									</v-btn>
 								</v-list-item>
@@ -65,19 +74,41 @@ export default {
 	data() {
 		return {
 			title: "Lista de tarefas",
-			tasks: [{ id: 1, name: "Lavar Louça" }],
+			tasks: [],
 			inputNewTask: {
 				id: "",
 				name: "",
 			},
+			updating: false,
+			updatedId: '',
 		};
 	},
 	methods: {
+		onSubmit() {
+			if (this.updating) {
+				this.updateTask();
+				return;
+			}
+			this.saveTask();
+		},
 		saveTask() {
 			this.inputNewTask.id = this.tasks.length + 1;
 			this.tasks.unshift(this.inputNewTask);
 			this.inputNewTask = {};
 		},
+		editTask(id) {
+			this.inputNewTask = this.tasks[id];
+			this.updatedId = id;
+			this.updating = true;
+		},
+		updateTask(){
+			this.tasks[this.updatedId] = this.inputNewTask
+			this.inputNewTask = {};
+			this.updating = false;
+		},
+		deleteTask(id) {
+			this.tasks.splice(id, 1)
+		}
 	},
 };
 </script>
