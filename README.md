@@ -20,5 +20,11 @@ npm run build
 npm run lint
 ```
 
+### Demo
+```
+https://myrmtasks.netlify.app/
+```
+
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
